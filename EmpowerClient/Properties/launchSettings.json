@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "EmpowerClient": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ImportDocument": "https://localhost:44328/mpw/resource/documents/import",
+        "GetToken": "https://localhost:44328/mpw/resource/gettoken",
+        "ExportDocument": "https://localhost:44328/mpw/resource/documents/{id}/export"
+      }
+    }
+  }
+}
