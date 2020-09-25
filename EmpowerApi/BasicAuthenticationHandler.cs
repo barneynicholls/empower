@@ -28,13 +28,22 @@ namespace EmpowerApi
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+           return await Task
+               .Run(Authenticate)
+               .ConfigureAwait(false);
+        }
+
+        private AuthenticateResult Authenticate()
+        {
             // skip authentication if endpoint has [AllowAnonymous] attribute
             var endpoint = Context.GetEndpoint();
             if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
                 return AuthenticateResult.NoResult();
 
             if (!Request.Headers.ContainsKey("Authorization"))
+            {
                 return AuthenticateResult.Fail("Missing Authorization Header");
+            }
 
             try
             {
@@ -44,7 +53,7 @@ namespace EmpowerApi
                 var username = credentials[0];
                 var password = credentials[1];
 
-                if(username != "user" || password != "password")
+                if (username != "user" || password != "password")
                     return AuthenticateResult.Fail("Invalid Username or Password");
 
                 var claims = new[] {

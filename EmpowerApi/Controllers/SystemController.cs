@@ -14,9 +14,9 @@ namespace EmpowerApi.Controllers
     {
         [HttpGet]
         [Route("/mpw/resource/GetToken")]
-        public SecurityTokenResponse GetToken()
+        public SecurityToken GetToken()
         {
-            return new SecurityTokenResponse
+            return new SecurityToken
             {
                 Header = new Header
                 {
@@ -27,7 +27,7 @@ namespace EmpowerApi.Controllers
                 },
                 Body = new SecurityBody
                 {
-                    CsrfHeader = SecurityTokenResponse.X_CSRF_TOKEN,
+                    CsrfHeader = SecurityToken.X_CSRF_TOKEN,
                     CsrfParameter = "_csrf",
                     CsrfToken = Guid.NewGuid().ToString()
                 }

@@ -1,6 +1,6 @@
 ﻿namespace Empower.Security
 {
-    public class SecurityTokenResponse
+    public class SecurityToken
     {
         public Header Header { get; set; }
         public SecurityBody Body { get; set; }

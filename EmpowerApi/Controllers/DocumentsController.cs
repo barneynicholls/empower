@@ -4,6 +4,7 @@ using System.Net.Mime;
 using Empower;
 using Empower.Document;
 using Empower.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
@@ -11,6 +12,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace EmpowerApi.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
@@ -26,7 +28,7 @@ namespace EmpowerApi.Controllers
         [Route("/mpw/resource/documents/import")]
         public IActionResult Import([FromForm] ImportRequest importRequest)
         {
-            if (!CheckForSecurityToken())
+            if (SecurityTokenMissing())
                 return Unauthorized();
 
             var response = new ImportResponse
@@ -63,16 +65,16 @@ namespace EmpowerApi.Controllers
             return new OkObjectResult(response);
         }
 
-        private bool CheckForSecurityToken()
+        private bool SecurityTokenMissing()
         {
-            return !string.IsNullOrEmpty(Request.Headers[SecurityTokenResponse.X_CSRF_TOKEN]);
+            return string.IsNullOrEmpty(Request.Headers[SecurityToken.X_CSRF_TOKEN]);
         }
 
         [HttpPost]
         [Route("/mpw/resource/documents/{id}/export")]
         public IActionResult Export(string id)
         {
-            if (!CheckForSecurityToken())
+            if (SecurityTokenMissing())
                 return Unauthorized();
 
             string filePath = Path.Combine(host.ContentRootPath, "App_Data", "test.zip");

@@ -7,6 +7,7 @@
         "ImportDocument": "https://localhost:44328/mpw/resource/documents/import",
         "GetToken": "https://localhost:44328/mpw/resource/gettoken",
         "Password": "password",
+        "CreateApp": "https://localhost:44328/mpw/resource/applications",
         "ExportDocument": "https://localhost:44328/mpw/resource/documents/{id}/export"
       }
     }
