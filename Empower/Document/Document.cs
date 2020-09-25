@@ -27,8 +27,4 @@ namespace Empower.Document
         public string RoleNames { get; set; }
         public string UserId { get; set; }
     }
-
-
-
-
 }
