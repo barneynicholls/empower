@@ -3,8 +3,10 @@
     "EmpowerClient": {
       "commandName": "Project",
       "environmentVariables": {
+        "UserName": "user",
         "ImportDocument": "https://localhost:44328/mpw/resource/documents/import",
         "GetToken": "https://localhost:44328/mpw/resource/gettoken",
+        "Password": "password",
         "ExportDocument": "https://localhost:44328/mpw/resource/documents/{id}/export"
       }
     }

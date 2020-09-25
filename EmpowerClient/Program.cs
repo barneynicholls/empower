@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -30,7 +31,10 @@ namespace EmpowerClient
                 .ConfigureAwait(false);
 
             Console.WriteLine("Done");
+            Console.ReadKey();
         }
+
+
 
         private static async Task Export()
         {
@@ -61,6 +65,17 @@ namespace EmpowerClient
         private static async Task GetSecurityToken()
         {
             using HttpClient client = new HttpClient(new HttpClientHandler { UseProxy = false });
+
+            var user = Environment.GetEnvironmentVariable("UserName");
+            var password = Environment.GetEnvironmentVariable("Password");
+
+            var authToken = Encoding
+                .ASCII
+                .GetBytes($"{user}:{password}");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(authToken));
 
             var response = await client
                 .GetAsync(Environment.GetEnvironmentVariable("GetToken"))
