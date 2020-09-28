@@ -31,6 +31,16 @@ namespace EmpowerApi.Controllers
             if (SecurityTokenMissing())
                 return Unauthorized();
 
+            var documentId = Guid.NewGuid().ToString();
+
+            string import = GetMpwPath(documentId);
+
+            using (var fs = new FileStream(import, FileMode.Create))
+            {
+                importRequest.File.CopyTo(fs);
+                fs.Close();
+            }
+
             var response = new ImportResponse
             {
                 Header = new Header
@@ -46,7 +56,7 @@ namespace EmpowerApi.Controllers
                         BusDocId = importRequest.BusDocId,
                         CreationDate = DateTime.Now,
                         Deleted = false,
-                        DocId = Guid.NewGuid().ToString(),
+                        DocId = documentId,
                         DocTags = importRequest.DocTag,
                         DocumentVersion = "400101",
                         EditorVersion = "1.1.0.7948",
@@ -65,6 +75,15 @@ namespace EmpowerApi.Controllers
             return new OkObjectResult(response);
         }
 
+        private string GetMpwPath(string documentId)
+        {
+            return Path.Combine(
+                host.ContentRootPath,
+                "App_Data",
+                "import",
+                Path.ChangeExtension(documentId, ".mpw"));
+        }
+
         private bool SecurityTokenMissing()
         {
             return string.IsNullOrEmpty(Request.Headers[SecurityToken.X_CSRF_TOKEN]);
@@ -77,12 +96,13 @@ namespace EmpowerApi.Controllers
             if (SecurityTokenMissing())
                 return Unauthorized();
 
-            string filePath = Path.Combine(host.ContentRootPath, "App_Data", "test.zip");
+            string filePath = GetMpwPath(id);
+
             var bytes = System.IO.File.ReadAllBytes(filePath);
 
             return new FileContentResult(bytes, MediaTypeNames.Application.Octet)
             {
-                FileDownloadName = $"test.{id}.zip",
+                FileDownloadName = Path.GetFileName(filePath),
             };
         }
     }

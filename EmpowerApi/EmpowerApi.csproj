@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="App_Data\import\index.html" />
     <None Remove="App_Data\test.zip" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="App_Data\import\index.html" />
     <Content Include="App_Data\test.zip" />
   </ItemGroup>
 
